@@ -17,6 +17,10 @@ Just as a biological motor system uses proprioception to detect a slip before a 
 2. **Angular Velocity ($\omega$)**: The turning rate. High values indicate the trajectory is "cornering" hard.
 3. **Angular Acceleration ($\dot{\omega}$)**: The **Instability Pulse**. A sudden spike here represents a "jerk" or structural slip.
 
+### The Value Proposition
+
+Think of Error-360 as **ABS brakes for Generative Models**. It operates with negligible overhead (<0.01%) to prevent "skidding" (hallucinations) without stopping the vehicle (inference), ensuring the model remains in control even during high-speed generation.
+
 ## 2. Why "Locomotive" Control?
 
 We reframe generative inference not as a static calculation, but as **high-dimensional locomotion** subject to dynamic constraints. The model must maintain "balance" (manifold adherence) while moving through the latent space.
@@ -126,13 +130,18 @@ Error-360 draws from control theory and differential geometry:
 
 ## 8. Roadmap & Validation
 
+Our immediate focus is empirical validation to prove that geometric stability correlates with output quality.
+
 - [x] Core Proprioception Monitor (Velocity, Omega, Alpha)
 - [x] Reflex Cascade (Temperature, Dampen, Backtrack)
 - [ ] **Robust Calibration**: Implement Median/MAD thresholding to handle heavy-tailed jerk distributions.
-- [ ] **Phase Space Visualization**: Plot $\omega$ vs $\dot{\omega}$ to visually distinguish "Creative Turns" (Green Zone) from "Instability Slips" (Red Zone).
+- [ ] **Visualization (The "Aha!" Moment)**:
+  - **Phase Portraits**: Real-time plotting of $\omega$ vs $\dot{\omega}$ to visualize the "Tube of Stability."
+  - **Zones**: Distinguish "Creative Turns" (Green/Yellow) from "Kinetic Fractures" (Red).
 - [ ] **Benchmarking**:
-  - **Detection**: "Canary Plots" showing Jerk spiking before visual collapse.
-  - **Diversity**: Track LPIPS scores to ensure stability does not compromise output diversity.
+  - **Canary Plots**: Demonstrate that $\dot{\omega}$ spikes 2-5 steps before visual collapse occurs.
+  - **Rescue Rate**: Quantify reduction in failure rates on hard benchmarks (DrawBench, PartiPrompts).
+  - **Diversity Check**: Track LPIPS and FID scores to ensure stability does not compromise output diversity ("Safer, not boring").
 
 ## 9. Citation
 
@@ -151,3 +160,6 @@ If you use Error-360 in your research, please cite:
 
 MIT License - see LICENSE for details.
 
+---
+
+*"The red line doesn't snap. It rotates."*
