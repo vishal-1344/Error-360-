@@ -1,6 +1,5 @@
 # Error-360° Anticipatory Geometric Control
-
-**A "System 2" Supervisor for Generative Models**
+**A System 2 Supervisor for Generative Models**
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/) [![Status](https://img.shields.io/badge/Status-Research_Preview-blue)]() [![License](https://img.shields.io/badge/License-MIT-green)]()
 
@@ -8,7 +7,7 @@
 
 ## 1. The Core Thesis
 
-Conventional ML monitors error ($\mathcal{L}$) to update weights. However, in generative tasks (diffusion, autoregressive video), loss is a **lagging indicator**. By the time loss spikes, the generation has already collapsed (hallucination, temporal flickering).
+Conventional ML monitors error ($\mathcal{L}$) to update weights. However, in generative tasks (diffusion, autoregressive video), loss is a **lagging indicator**. By the time loss spikes, the generation has already collapsed (hallucination, temporal flickering, mode collapse).
 
 **Error-360 posits that failure is preceded by geometric instability in the latent manifold.**
 
@@ -20,13 +19,79 @@ We monitor three kinematic signals in the high-dimensional latent space:
 
 ## 2. Methodology
 
-The system acts as a "Feed-360" loop wrapping standard inference:
+The system acts as a "Feed-360" loop wrapping standard inference. It forecasts instability and intervenes before failure manifests.
 
-```mermaid
-graph TD;
-    A[Generative Model] -->|z_t| B[Error-360 Monitor];
-    B -->|Compute ω & α| C{Instability?};
-    C -- Yes (α > θ) --> D[Controller];
-    D -->|Dampen / Backtrack| A;
-    C -- No --> A;
+```ascii
+    ┌─────────────────────────────────────┐
+    │     Generative Model (Diffusion)    │
+    └──────────────┬──────────────────────┘
+                   │ z_t (latent state)
+                   ▼
+    ┌─────────────────────────────────────┐
+    │       Error-360 Monitor             │
+    │  ─────────────────────────────      │
+    │  • Compute ω (angular velocity)     │
+    │  • Detect α = dω/dt (acceleration)  │
+    │  • Flag instability if α > θ        │
+    └──────────────┬──────────────────────┘
+                   │ metrics
+                   ▼
+    ┌─────────────────────────────────────┐
+    │       Controller (Intervention)     │
+    │  ─────────────────────────────      │
+    │  • Dampen: Interpolate with history │
+    │  • Backtrack: Revert to stable state│
+    │  • Temperature: Reduce randomness   │
+    └─────────────────────────────────────┘
+(Visual: A stable blue trajectory vs. a red unstable trajectory spiraling off-manifold)The Pulse SignalWe utilize the derivative of cosine similarity to detect "panic" in the model's reasoning process:$$\omega_t = 1 - \cos(\vec{v}_{t-1}, \vec{v}_t) \quad \text{where} \quad \vec{v}_t = z_t - z_{t-1}$$$$\alpha_t = \omega_t - \omega_{t-1} \quad \text{(The Pulse)}$$If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window—mirroring how biological motor control corrects instability before damage occurs.3. Relationship to Existing ParadigmsError-360 complements probabilistic learning by adding a geometric control layer.ParadigmObjectiveTriggerLimitationStandard MLMinimize LossHigh Loss ValueReactive (Too late)RLMaximize RewardNegative RewardSparse feedback; slow to convergeMPCOptimal ControlModel DeviationRigid model assumptionsError-360Maintain StabilityGeometric Pulse ($\dot{\omega}$)Anticipatory & Self-Regulating4. InstallationBashgit clone [https://github.com/yourusername/error-360.git](https://github.com/yourusername/error-360.git)
+cd error-360
+pip install -r requirements.txt
+5. UsageError-360 is designed to wrap around any PyTorch inference loop (LLM or Diffusion).Basic Example: Monitoring OnlyPythonfrom error360 import Error360Monitor
 
+# Initialize the geometric supervisor
+monitor = Error360Monitor(instability_threshold=0.15)
+
+# Inside your generation loop
+for t, latent in enumerate(diffusion_steps):
+    
+    # 1. Check Geometry
+    metrics = monitor.update(latent)
+    
+    # 2. Anticipatory Control
+    if metrics['alpha'] > 0.15:
+        print(f"[Warning] Instability detected at step {t}. Dampening...")
+        # Intervention: Reduce step size or temperature
+        current_sigma *= 0.8 
+        
+    # 3. Standard Step
+    latent = model(latent)
+Advanced: Full ControllerPythonfrom error360 import Error360Monitor, Error360Controller
+
+monitor = Error360Monitor(instability_threshold=0.15)
+controller = Error360Controller(monitor, strategy="dampen")
+
+for t in range(num_steps):
+    # Get current latent from your model
+    latent = model.get_latent()
+    
+    # Controller performs geometric analysis and intervention
+    result = controller.step(latent, temperature=1.0)
+    
+    # Use the potentially modified state
+    latent = result['latent']
+    temperature = result['temperature']
+    
+    if result['intervened']:
+        print(f"Step {t}: Intervention via {result['strategy']}")
+        print(f"  Alpha: {result['metrics']['alpha']:.4f}")
+        print(f"  Risk: {result['metrics']['risk']:.2f}x threshold")
+    
+    # Continue generation with adjusted parameters
+    output = model.generate(latent, temperature=temperature)
+6. Theoretical FoundationsError-360 draws from control theory and differential geometry:Geodesic Deviation: Monitors how trajectories diverge from shortest paths in latent space.Lyapunov Stability: Angular acceleration serves as a proxy for exponential divergence.Feed-Forward Anticipation: Acts on geometric precursors rather than realized error.This approach is particularly relevant for:Diffusion Models: Preventing sample collapse in later denoising steps.Autoregressive LLMs: Detecting hallucination onset before token generation.Video Generation: Maintaining temporal coherence across frames.7. Roadmap[x] Core geometric monitor implementation[x] Three intervention strategies (dampen, backtrack, temperature)[ ] Adaptive Thresholding: Gain scheduling based on local manifold curvature[ ] Visualization: Integration with Blender/TouchDesigner for real-time trajectory plotting[ ] Feed-360 Integration: Full closed-loop control where the model can "request" a rewind[ ] Benchmarking: Quantitative evaluation on standard diffusion/LLM tasks8. CitationIf you use Error-360 in your research, please cite:Code snippet@software{error360_2025,
+  author = {Vishal J.},
+  title = {Error-360: Anticipatory Geometric Control for Generative Models},
+  year = {2025},
+  url = {[https://github.com/yourusername/error-360](https://github.com/yourusername/error-360)}
+}
+9. LicenseMIT License - see LICENSE for details.10.
