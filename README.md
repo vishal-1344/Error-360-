@@ -7,7 +7,7 @@
 
 ## 1. The Core Thesis
 
-Conventional ML treats error as a static, pointwise deviation ($\mathcal{L}$). However, in generative tasks—like video synthesis or long-horizon planning, where error is a **kinetic event**. By the time loss spikes, the model has effectively "fallen over" (hallucination, temporal decoherence, mode collapse).
+Conventional ML treats error as a static, pointwise deviation ($\mathcal{L}$). However, in generative tasks—like video synthesis or long-horizon planning—error is a **kinetic event**. By the time loss spikes, the model has effectively "fallen over" (hallucination, temporal decoherence, mode collapse).
 
 **Error-360 posits that generating a coherent sequence is an act of high-dimensional locomotion.**
 
@@ -185,6 +185,7 @@ MIT License - see LICENSE for details.
 ## 10. Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
 
 
 
