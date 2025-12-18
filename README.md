@@ -1,23 +1,33 @@
-# Error-360° Anticipatory Geometric Control
-**A System 2 Supervisor for Generative Models**
+# Error-360°
+**Locomotive Geometric Control for Generative Stability**
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/) [![Status](https://img.shields.io/badge/Status-Research_Preview-blue)]() [![License](https://img.shields.io/badge/License-MIT-green)]()
 
-> "Precision is the ability to react within the pulse window of instability, not the ability to minimize error after it occurs."
+> "Precision is the ability to correct a stumble, not just the ability to measure a fall."
 
 ## 1. The Core Thesis
 
-Conventional ML monitors error ($\mathcal{L}$) to update weights. However, in generative tasks (diffusion, autoregressive video), loss is a **lagging indicator**. By the time loss spikes, the generation has already collapsed (hallucination, temporal flickering, mode collapse).
+Conventional ML treats error as a static, pointwise deviation ($\mathcal{L}$). However, in generative tasks—like video synthesis or long-horizon planning—error is a **kinetic event**. By the time loss spikes, the model has effectively "fallen over" (hallucination, temporal decoherence, mode collapse).
 
-**Error-360 posits that failure is preceded by geometric instability in the latent manifold.**
+**Error-360 posits that generating a coherent sequence is an act of high-dimensional locomotion.**
 
-We monitor three kinematic signals in the high-dimensional latent space:
+Just as a biological motor system detects a slip before a fall, Error-360 monitors the "gait" of the generative process. We track three kinematic signals in the latent manifold to detect **stumble precursors**:
 
-1. **Velocity ($\dot{z}$)**: Rate of representational change.
-2. **Angular Velocity ($\omega$)**: Deviation from the geodesic (cosine distance).
-3. **Angular Acceleration ($\dot{\omega}$)**: The **Pulse Signal**. A spike here predicts divergence *before* pixel-level corruption occurs.
+1.  **Velocity ($\dot{z}$)**: The stride length or rate of representational change.
+2.  **Angular Velocity ($\omega$)**: The turning rate. High values indicate the trajectory is "cornering" hard to find a solution.
+3.  **Angular Acceleration ($\dot{\omega}$)**: The **Instability Pulse**. A sudden spike here represents a "jerk" or slip—predicting trajectory collapse *before* pixel-level corruption occurs.
 
-## 2. Methodology
+## 2. Why "Locomotive" Control?
+
+We reframe generative inference not as a series of independent predictions, but as a continuous trajectory subject to dynamic constraints:
+
+* **Momentum:** Does the model maintain consistent semantic direction?
+* **Balance:** Does the trajectory stay close to the data manifold's geodesic?
+* **Recovery:** When the model encounters a "rough patch" (high uncertainty), can it regain stability without resetting?
+
+Error-360 acts as a **Digital Cerebellum**, applying micro-corrections to the latent state to maintain a stable gait through the generation process.
+
+## 3. Methodology
 
 The system acts as a "Feed-360" loop wrapping standard inference. It forecasts instability and intervenes before failure manifests.
 
@@ -30,18 +40,18 @@ The system acts as a "Feed-360" loop wrapping standard inference. It forecasts i
     ┌─────────────────────────────────────┐
     │       Error-360 Monitor             │
     │  ─────────────────────────────      │
-    │  • Compute ω (angular velocity)     │
-    │  • Detect α = dω/dt (acceleration)  │
-    │  • Flag instability if α > θ        │
+    │  • Measure Gait (Velocity/Turn)     │
+    │  • Detect Slip (Acceleration > θ)   │
+    │  • Flag Instability                 │
     └──────────────┬──────────────────────┘
                    │ metrics
                    ▼
     ┌─────────────────────────────────────┐
-    │       Controller (Intervention)     │
+    │       Controller (Reflex Layer)     │
     │  ─────────────────────────────      │
-    │  • Dampen: Interpolate with history │
-    │  • Backtrack: Revert to stable state│
-    │  • Temperature: Reduce randomness   │
+    │  • Dampen: Slow down evolution      │
+    │  • Rebalance: Interpolate history   │
+    │  • Anchor: Revert to stable state   │
     └─────────────────────────────────────┘
 ```
 
@@ -175,4 +185,5 @@ MIT License - see LICENSE for details.
 ## 10. Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
 
