@@ -13,9 +13,9 @@ Conventional ML monitors error ($\mathcal{L}$) to update weights. However, in ge
 
 We monitor three kinematic signals in the high-dimensional latent space:
 
-1.  **Velocity ($\dot{z}$)**: Rate of representational change.
-2.  **Angular Velocity ($\omega$)**: Deviation from the geodesic (cosine distance).
-3.  **Angular Acceleration ($\dot{\omega}$)**: The **Pulse Signal**. A spike here predicts divergence *before* pixel-level corruption occurs.
+1. **Velocity ($\dot{z}$)**: Rate of representational change.
+2. **Angular Velocity ($\omega$)**: Deviation from the geodesic (cosine distance).
+3. **Angular Acceleration ($\dot{\omega}$)**: The **Pulse Signal**. A spike here predicts divergence *before* pixel-level corruption occurs.
 
 ## 2. Methodology
 
@@ -43,10 +43,47 @@ The system acts as a "Feed-360" loop wrapping standard inference. It forecasts i
     │  • Backtrack: Revert to stable state│
     │  • Temperature: Reduce randomness   │
     └─────────────────────────────────────┘
-(Visual: A stable blue trajectory vs. a red unstable trajectory spiraling off-manifold)The Pulse SignalWe utilize the derivative of cosine similarity to detect "panic" in the model's reasoning process:$$\omega_t = 1 - \cos(\vec{v}_{t-1}, \vec{v}_t) \quad \text{where} \quad \vec{v}_t = z_t - z_{t-1}$$$$\alpha_t = \omega_t - \omega_{t-1} \quad \text{(The Pulse)}$$If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window—mirroring how biological motor control corrects instability before damage occurs.3. Relationship to Existing ParadigmsError-360 complements probabilistic learning by adding a geometric control layer.ParadigmObjectiveTriggerLimitationStandard MLMinimize LossHigh Loss ValueReactive (Too late)RLMaximize RewardNegative RewardSparse feedback; slow to convergeMPCOptimal ControlModel DeviationRigid model assumptionsError-360Maintain StabilityGeometric Pulse ($\dot{\omega}$)Anticipatory & Self-Regulating4. InstallationBashgit clone [https://github.com/yourusername/error-360.git](https://github.com/yourusername/error-360.git)
+```
+
+*(Visual: A stable blue trajectory vs. a red unstable trajectory spiraling off-manifold)*
+
+### The Pulse Signal
+
+We utilize the derivative of cosine similarity to detect "panic" in the model's reasoning process:
+
+$$\omega_t = 1 - \cos(\vec{v}_{t-1}, \vec{v}_t) \quad \text{where} \quad \vec{v}_t = z_t - z_{t-1}$$
+
+$$\alpha_t = \omega_t - \omega_{t-1} \quad \text{(The Pulse)}$$
+
+If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window—mirroring how biological motor control corrects instability before damage occurs.
+
+## 3. Relationship to Existing Paradigms
+
+Error-360 complements probabilistic learning by adding a geometric control layer.
+
+| Paradigm | Objective | Trigger | Limitation |
+|----------|-----------|---------|------------|
+| Standard ML | Minimize Loss | High Loss Value | Reactive (Too late) |
+| RL | Maximize Reward | Negative Reward | Sparse feedback; slow to converge |
+| MPC | Optimal Control | Model Deviation | Rigid model assumptions |
+| Error-360 | Maintain Stability | Geometric Pulse ($\dot{\omega}$) | Anticipatory & Self-Regulating |
+
+## 4. Installation
+
+```bash
+git clone https://github.com/yourusername/error-360.git
 cd error-360
 pip install -r requirements.txt
-5. UsageError-360 is designed to wrap around any PyTorch inference loop (LLM or Diffusion).Basic Example: Monitoring OnlyPythonfrom error360 import Error360Monitor
+```
+
+## 5. Usage
+
+Error-360 is designed to wrap around any PyTorch inference loop (LLM or Diffusion).
+
+### Basic Example: Monitoring Only
+
+```python
+from error360 import Error360Monitor
 
 # Initialize the geometric supervisor
 monitor = Error360Monitor(instability_threshold=0.15)
@@ -65,7 +102,12 @@ for t, latent in enumerate(diffusion_steps):
         
     # 3. Standard Step
     latent = model(latent)
-Advanced: Full ControllerPythonfrom error360 import Error360Monitor, Error360Controller
+```
+
+### Advanced: Full Controller
+
+```python
+from error360 import Error360Monitor, Error360Controller
 
 monitor = Error360Monitor(instability_threshold=0.15)
 controller = Error360Controller(monitor, strategy="dampen")
@@ -88,10 +130,48 @@ for t in range(num_steps):
     
     # Continue generation with adjusted parameters
     output = model.generate(latent, temperature=temperature)
-6. Theoretical FoundationsError-360 draws from control theory and differential geometry:Geodesic Deviation: Monitors how trajectories diverge from shortest paths in latent space.Lyapunov Stability: Angular acceleration serves as a proxy for exponential divergence.Feed-Forward Anticipation: Acts on geometric precursors rather than realized error.This approach is particularly relevant for:Diffusion Models: Preventing sample collapse in later denoising steps.Autoregressive LLMs: Detecting hallucination onset before token generation.Video Generation: Maintaining temporal coherence across frames.7. Roadmap[x] Core geometric monitor implementation[x] Three intervention strategies (dampen, backtrack, temperature)[ ] Adaptive Thresholding: Gain scheduling based on local manifold curvature[ ] Visualization: Integration with Blender/TouchDesigner for real-time trajectory plotting[ ] Feed-360 Integration: Full closed-loop control where the model can "request" a rewind[ ] Benchmarking: Quantitative evaluation on standard diffusion/LLM tasks8. CitationIf you use Error-360 in your research, please cite:Code snippet@software{error360_2025,
+```
+
+## 6. Theoretical Foundations
+
+Error-360 draws from control theory and differential geometry:
+
+- **Geodesic Deviation**: Monitors how trajectories diverge from shortest paths in latent space.
+- **Lyapunov Stability**: Angular acceleration serves as a proxy for exponential divergence.
+- **Feed-Forward Anticipation**: Acts on geometric precursors rather than realized error.
+
+This approach is particularly relevant for:
+
+- **Diffusion Models**: Preventing sample collapse in later denoising steps.
+- **Autoregressive LLMs**: Detecting hallucination onset before token generation.
+- **Video Generation**: Maintaining temporal coherence across frames.
+
+## 7. Roadmap
+
+- [x] Core geometric monitor implementation
+- [x] Three intervention strategies (dampen, backtrack, temperature)
+- [ ] Adaptive Thresholding: Gain scheduling based on local manifold curvature
+- [ ] Visualization: Integration with Blender/TouchDesigner for real-time trajectory plotting
+- [ ] Feed-360 Integration: Full closed-loop control where the model can "request" a rewind
+- [ ] Benchmarking: Quantitative evaluation on standard diffusion/LLM tasks
+
+## 8. Citation
+
+If you use Error-360 in your research, please cite:
+
+```bibtex
+@software{error360_2025,
   author = {Vishal J.},
   title = {Error-360: Anticipatory Geometric Control for Generative Models},
   year = {2025},
-  url = {[https://github.com/yourusername/error-360](https://github.com/yourusername/error-360)}
+  url = {https://github.com/yourusername/error-360}
 }
-9. LicenseMIT License - see LICENSE for details.10.
+```
+
+## 9. License
+
+MIT License - see LICENSE for details.
+
+## 10. Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
