@@ -1,5 +1,5 @@
 # Error-360°
-**Locomotive Control & Latent Proprioception for Generative Stability**
+**Anticipatory Error Handling via Latent Proprioception & Locomotive Control**
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/) [![Status](https://img.shields.io/badge/Status-Research_Preview-blue)]() [![License](https://img.shields.io/badge/License-MIT-green)]()
 
@@ -7,15 +7,11 @@
 
 ## 1. The Core Thesis
 
-Conventional ML relies on **exteroception**: measuring error against external ground truth ($\mathcal{L}$). However, in generative tasks (diffusion, planning), this is a lagging indicator. By the time the "visual" output is corrupted, the internal reasoning process has already collapsed.
+Generative models, despite their success, suffer from critical reliability failures—including **hallucination, mode collapse, and temporal decoherence**—which render them unsafe for high-stakes deployment. Current error-handling paradigms are fundamentally **reactive**, relying on exteroceptive signals (e.g., loss functions or classifiers) that detect failure only after the generation has degraded.
 
-**Error-360 introduces Latent Proprioception: the capacity for a model to sense the stability of its own internal state trajectory.**
+**Error-360 is a framework for anticipatory error handling that re-frames generative inference as a high-dimensional locomotive process.**
 
-Just as a biological motor system uses proprioception to detect a slip before a fall, Error-360 monitors the "gait" of the generative process. We track three kinematic signals to detect **stumble precursors** before they manifest as hallucinations:
-
-1. **Velocity ($\dot{z}$)**: The stride length or rate of representational change.
-2. **Angular Velocity ($\omega$)**: The turning rate. High values indicate the trajectory is "cornering" hard.
-3. **Angular Acceleration ($\dot{\omega}$)**: The **Instability Pulse**. A sudden spike here represents a "jerk" or structural slip.
+We introduce **Latent Proprioception**: the capacity for a model to sense the stability of its own internal state trajectory. By monitoring the kinematics of the latent path—specifically the angular acceleration ($\dot{\omega}$) or "jerk"—we identify geometric precursors to collapse steps *before* pixel-level corruption occurs.
 
 ### The Value Proposition
 
@@ -23,9 +19,9 @@ Think of Error-360 as **ABS brakes for Generative Models**. It operates with neg
 
 ## 2. Why "Locomotive" Control?
 
-We reframe generative inference not as a static calculation, but as **high-dimensional locomotion** subject to dynamic constraints. The model must maintain "balance" (manifold adherence) while moving through the latent space.
+To achieve robust error handling, we treat the inference process not as a static calculation, but as **locomotion** through a manifold. The model must maintain "balance" (adherence to valid regions) while moving.
 
-Error-360 acts as the **Digital Cerebellum**, using proprioceptive feedback to apply micro-corrections (dampening, re-balancing) ensuring the model maintains a stable gait throughout the generation.
+Error-360 acts as a **Digital Cerebellum**, using proprioceptive feedback to apply micro-corrections (dampening, re-balancing) ensuring the model maintains a stable gait throughout the generation.
 
 ## 3. Methodology
 
@@ -76,13 +72,13 @@ Interventions are applied based on the severity of the slip, minimizing impact o
 
 ## 4. Relationship to Existing Paradigms
 
-Error-360 complements probabilistic learning by adding a geometric control layer.
+Error-360 complements probabilistic learning by adding a geometric control layer for superior error handling.
 
 | Paradigm | Objective | Mechanism | Limitation |
 |----------|-----------|-----------|------------|
 | Standard ML | Minimize Loss | Exteroception (Output Check) | Reactive (Too late) |
 | RL | Maximize Reward | Sparse Feedback | Slow convergence |
-| Error-360 | Maintain Stability | Proprioception (Internal Sense) | Anticipatory |
+| Error-360 | Prevent Failure | Proprioception (Internal Sense) | Anticipatory |
 
 ## 5. Installation
 
@@ -150,7 +146,7 @@ If you use Error-360 in your research, please cite:
 ```bibtex
 @software{error360_2025,
   author = {Vishal J.},
-  title = {Error-360: Locomotive Control and Latent Proprioception for Generative Stability},
+  title = {Error-360: Anticipatory Error Handling via Latent Proprioception and Locomotive Control},
   year = {2025},
   url = {https://github.com/yourusername/error-360}
 }
