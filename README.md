@@ -55,7 +55,7 @@ $$\omega_t = 1 - \cos(\vec{v}_{t-1}, \vec{v}_t) \quad \text{where} \quad \vec{v}
 
 $$\alpha_t = \omega_t - \omega_{t-1} \quad \text{(The Pulse)}$$
 
-If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window—mirroring how biological motor control corrects instability before damage occurs.
+If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window mirroring how biological motor control corrects instability before damage occurs.
 
 ## 3. Relationship to Existing Paradigms
 
@@ -175,3 +175,4 @@ MIT License - see LICENSE for details.
 ## 10. Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
