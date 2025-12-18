@@ -7,7 +7,7 @@
 
 ## 1. The Core Thesis
 
-Generative models, despite their success, suffer from critical reliability failures—including **hallucination, mode collapse, and temporal decoherence**—which render them unsafe for high-stakes deployment. Current error-handling paradigms are fundamentally **reactive**, relying on exteroceptive signals (e.g., loss functions or classifiers) that detect failure only after the generation has degraded.
+Generative models, despite their success, suffer from critical reliability failures including **hallucination, mode collapse, and temporal decoherence** which render them unsafe for high-stakes deployment. Current error-handling paradigms are fundamentally **reactive**, relying on exteroceptive signals (e.g., loss functions or classifiers) that detect failure only after the generation has degraded.
 
 **Error-360 is a framework for anticipatory error handling that re-frames generative inference as a high-dimensional locomotive process.**
 
