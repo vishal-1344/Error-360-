@@ -1,4 +1,4 @@
-# Error-360: Anticipatory Geometric Control
+# Error-360° Anticipatory Geometric Control
 
 **A "System 2" Supervisor for Generative Models**
 
@@ -29,3 +29,4 @@ graph TD;
     C -- Yes (α > θ) --> D[Controller];
     D -->|Dampen / Backtrack| A;
     C -- No --> A;
+
