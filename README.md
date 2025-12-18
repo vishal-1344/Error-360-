@@ -3,7 +3,7 @@
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/) [![Status](https://img.shields.io/badge/Status-Research_Preview-blue)]() [![License](https://img.shields.io/badge/License-MIT-green)]()
 
-> "Precision is the ability to correct a stumble, not just the ability to measure a fall."
+> "Precision is the ability to react within the pulse window of instability, not the ability to minimize error after it occurs"
 
 ## 1. The Core Thesis
 
@@ -150,3 +150,4 @@ If you use Error-360 in your research, please cite:
 ## 10. License
 
 MIT License - see LICENSE for details.
+
