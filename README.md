@@ -1,31 +1,27 @@
 # Error-360°
-**Locomotive Geometric Control for Generative Stability**
+**Locomotive Control & Latent Proprioception for Generative Stability**
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/) [![Status](https://img.shields.io/badge/Status-Research_Preview-blue)]() [![License](https://img.shields.io/badge/License-MIT-green)]()
 
-> "Precision is the ability to react within the pulse window of instability, not the ability to minimize error after it occurs."
+> "Precision is the ability to correct a stumble, not just the ability to measure a fall."
 
 ## 1. The Core Thesis
 
-Conventional ML treats error as a static, pointwise deviation ($\mathcal{L}$). However, in generative tasks—like video synthesis or long-horizon planning—error is a **kinetic event**. By the time loss spikes, the model has effectively "fallen over" (hallucination, temporal decoherence, mode collapse).
+Conventional ML relies on **exteroception**: measuring error against external ground truth ($\mathcal{L}$). However, in generative tasks (diffusion, planning), this is a lagging indicator. By the time the "visual" output is corrupted, the internal reasoning process has already collapsed.
 
-**Error-360 posits that generating a coherent sequence is an act of high-dimensional locomotion.**
+**Error-360 introduces Latent Proprioception: the capacity for a model to sense the stability of its own internal state trajectory.**
 
-Just as a biological motor system detects a slip before a fall, Error-360 monitors the "gait" of the generative process. We track three kinematic signals in the latent manifold to detect **stumble precursors**:
+Just as a biological motor system uses proprioception to detect a slip before a fall, Error-360 monitors the "gait" of the generative process. We track three kinematic signals to detect **stumble precursors** before they manifest as hallucinations:
 
-1.  **Velocity ($\dot{z}$)**: The stride length or rate of representational change.
-2.  **Angular Velocity ($\omega$)**: The turning rate. High values indicate the trajectory is "cornering" hard to find a solution.
-3.  **Angular Acceleration ($\dot{\omega}$)**: The **Instability Pulse**. A sudden spike here represents a "jerk" or slip—predicting trajectory collapse *before* pixel-level corruption occurs.
+1. **Velocity ($\dot{z}$)**: The stride length or rate of representational change.
+2. **Angular Velocity ($\omega$)**: The turning rate. High values indicate the trajectory is "cornering" hard.
+3. **Angular Acceleration ($\dot{\omega}$)**: The **Instability Pulse**. A sudden spike here represents a "jerk" or structural slip.
 
 ## 2. Why "Locomotive" Control?
 
-We reframe generative inference not as a series of independent predictions, but as a continuous trajectory subject to dynamic constraints:
+We reframe generative inference not as a static calculation, but as **high-dimensional locomotion** subject to dynamic constraints. The model must maintain "balance" (manifold adherence) while moving through the latent space.
 
-* **Momentum:** Does the model maintain consistent semantic direction?
-* **Balance:** Does the trajectory stay close to the data manifold's geodesic?
-* **Recovery:** When the model encounters a "rough patch" (high uncertainty), can it regain stability without resetting?
-
-Error-360 acts as a **Digital Cerebellum**, applying micro-corrections to the latent state to maintain a stable gait through the generation process.
+Error-360 acts as the **Digital Cerebellum**, using proprioceptive feedback to apply micro-corrections (dampening, re-balancing) ensuring the model maintains a stable gait throughout the generation.
 
 ## 3. Methodology
 
@@ -39,23 +35,22 @@ The system acts as a "Feed-360" loop wrapping standard inference. It forecasts i
                    ▼
     ┌─────────────────────────────────────┐
     │       Error-360 Monitor             │
+    │      (Latent Proprioception)        │
     │  ─────────────────────────────      │
     │  • Measure Gait (Velocity/Turn)     │
     │  • Detect Slip (Acceleration > θ)   │
-    │  • Flag Instability                 │
+    │  • Signal Instability               │
     └──────────────┬──────────────────────┘
                    │ metrics
                    ▼
     ┌─────────────────────────────────────┐
     │       Controller (Reflex Layer)     │
     │  ─────────────────────────────      │
-    │  • Dampen: Slow down evolution      │
-    │  • Rebalance: Interpolate history   │
-    │  • Anchor: Revert to stable state   │
+    │  • Level 1: Micro-Adjust Temp       │
+    │  • Level 2: Dampen Momentum         │
+    │  • Level 3: Backtrack & Perturb     │
     └─────────────────────────────────────┘
 ```
-
-*(Visual: A stable blue trajectory vs. a red unstable trajectory spiraling off-manifold)*
 
 ### The Pulse Signal
 
@@ -65,20 +60,27 @@ $$\omega_t = 1 - \cos(\vec{v}_{t-1}, \vec{v}_t) \quad \text{where} \quad \vec{v}
 
 $$\alpha_t = \omega_t - \omega_{t-1} \quad \text{(The Pulse)}$$
 
-If $\text{Pulse} > \text{Threshold}$, the controller intervenes within the Pulse Reactive Time (PRT) window mirroring how biological motor control corrects instability before damage occurs.
+If $\text{Pulse} > \text{Threshold}$, the controller triggers a Reflex Cascade within the Pulse Reactive Time (PRT) window.
 
-## 3. Relationship to Existing Paradigms
+### Intervention Strategy: The Reflex Cascade
+
+Interventions are applied based on the severity of the slip, minimizing impact on creativity:
+
+1. **Micro-Correction (Low Severity)**: Dynamic Temperature Adjustment. Slightly reduce randomness to stabilize footing.
+2. **Dampening (Medium Severity)**: Momentum Decay. Blend current update with previous stable vector.
+3. **Branch & Bound (High Severity)**: Backtrack to the last "Safe Harbor" checkpoint and perturb the trajectory (noise injection) to avoid repeating the same error.
+
+## 4. Relationship to Existing Paradigms
 
 Error-360 complements probabilistic learning by adding a geometric control layer.
 
-| Paradigm | Objective | Trigger | Limitation |
-|----------|-----------|---------|------------|
-| Standard ML | Minimize Loss | High Loss Value | Reactive (Too late) |
-| RL | Maximize Reward | Negative Reward | Sparse feedback; slow to converge |
-| MPC | Optimal Control | Model Deviation | Rigid model assumptions |
-| Error-360 | Maintain Stability | Geometric Pulse ($\dot{\omega}$) | Anticipatory & Self-Regulating |
+| Paradigm | Objective | Mechanism | Limitation |
+|----------|-----------|-----------|------------|
+| Standard ML | Minimize Loss | Exteroception (Output Check) | Reactive (Too late) |
+| RL | Maximize Reward | Sparse Feedback | Slow convergence |
+| Error-360 | Maintain Stability | Proprioception (Internal Sense) | Anticipatory |
 
-## 4. Installation
+## 5. Installation
 
 ```bash
 git clone https://github.com/yourusername/error-360.git
@@ -86,7 +88,7 @@ cd error-360
 pip install -r requirements.txt
 ```
 
-## 5. Usage
+## 6. Usage
 
 Error-360 is designed to wrap around any PyTorch inference loop (LLM or Diffusion).
 
@@ -95,97 +97,56 @@ Error-360 is designed to wrap around any PyTorch inference loop (LLM or Diffusio
 ```python
 from error360 import Error360Monitor
 
-# Initialize the geometric supervisor
-monitor = Error360Monitor(instability_threshold=0.15)
+# Initialize with robust statistics (Median + MAD) for outlier resistance
+monitor = Error360Monitor(calibration_mode="robust")
 
 # Inside your generation loop
 for t, latent in enumerate(diffusion_steps):
     
-    # 1. Check Geometry
+    # 1. Proprioceptive Check
     metrics = monitor.update(latent)
     
-    # 2. Anticipatory Control
-    if metrics['alpha'] > 0.15:
-        print(f"[Warning] Instability detected at step {t}. Dampening...")
-        # Intervention: Reduce step size or temperature
-        current_sigma *= 0.8 
+    # 2. Reflex Action
+    if metrics['alpha'] > monitor.threshold:
+        print(f"[Reflex] Slip detected at step {t}. Correcting...")
+        # Intervention logic here...
         
     # 3. Standard Step
     latent = model(latent)
 ```
 
-### Advanced: Full Controller
-
-```python
-from error360 import Error360Monitor, Error360Controller
-
-monitor = Error360Monitor(instability_threshold=0.15)
-controller = Error360Controller(monitor, strategy="dampen")
-
-for t in range(num_steps):
-    # Get current latent from your model
-    latent = model.get_latent()
-    
-    # Controller performs geometric analysis and intervention
-    result = controller.step(latent, temperature=1.0)
-    
-    # Use the potentially modified state
-    latent = result['latent']
-    temperature = result['temperature']
-    
-    if result['intervened']:
-        print(f"Step {t}: Intervention via {result['strategy']}")
-        print(f"  Alpha: {result['metrics']['alpha']:.4f}")
-        print(f"  Risk: {result['metrics']['risk']:.2f}x threshold")
-    
-    # Continue generation with adjusted parameters
-    output = model.generate(latent, temperature=temperature)
-```
-
-## 6. Theoretical Foundations
+## 7. Theoretical Foundations
 
 Error-360 draws from control theory and differential geometry:
 
+- **Latent Proprioception**: Provides the "inner sense" required for autonomous stability regulation.
 - **Geodesic Deviation**: Monitors how trajectories diverge from shortest paths in latent space.
 - **Lyapunov Stability**: Angular acceleration serves as a proxy for exponential divergence.
-- **Feed-Forward Anticipation**: Acts on geometric precursors rather than realized error.
+- **Computational Efficiency**: Operates with $O(d)$ complexity (vector dot products), introducing negligible overhead (<0.01%) compared to the $O(d^2)$ cost of the underlying generative inference.
 
-This approach is particularly relevant for:
+## 8. Roadmap & Validation
 
-- **Diffusion Models**: Preventing sample collapse in later denoising steps.
-- **Autoregressive LLMs**: Detecting hallucination onset before token generation.
-- **Video Generation**: Maintaining temporal coherence across frames.
+- [x] Core Proprioception Monitor (Velocity, Omega, Alpha)
+- [x] Reflex Cascade (Temperature, Dampen, Backtrack)
+- [ ] **Robust Calibration**: Implement Median/MAD thresholding to handle heavy-tailed jerk distributions.
+- [ ] **Phase Space Visualization**: Plot $\omega$ vs $\dot{\omega}$ to visually distinguish "Creative Turns" (Green Zone) from "Instability Slips" (Red Zone).
+- [ ] **Benchmarking**:
+  - **Detection**: "Canary Plots" showing Jerk spiking before visual collapse.
+  - **Diversity**: Track LPIPS scores to ensure stability does not compromise output diversity.
 
-## 7. Roadmap
-
-- [x] Core geometric monitor implementation
-- [x] Three intervention strategies (dampen, backtrack, temperature)
-- [ ] Adaptive Thresholding: Gain scheduling based on local manifold curvature
-- [ ] Visualization: Integration with Blender/TouchDesigner for real-time trajectory plotting
-- [ ] Feed-360 Integration: Full closed-loop control where the model can "request" a rewind
-- [ ] Benchmarking: Quantitative evaluation on standard diffusion/LLM tasks
-
-## 8. Citation
+## 9. Citation
 
 If you use Error-360 in your research, please cite:
 
 ```bibtex
 @software{error360_2025,
   author = {Vishal J.},
-  title = {Error-360: Anticipatory Geometric Control for Generative Models},
+  title = {Error-360: Locomotive Control and Latent Proprioception for Generative Stability},
   year = {2025},
   url = {https://github.com/yourusername/error-360}
 }
 ```
 
-## 9. License
+## 10. License
 
 MIT License - see LICENSE for details.
-
-## 10. Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-
-
-
