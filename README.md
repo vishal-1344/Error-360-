@@ -74,14 +74,14 @@ Interventions are model-native and severity-adaptive:
 
 ```ascii
     ┌─────────────────────────────────────┐
-    │   Generative Model (e.g., SDXL)    │
-    │         Scheduler: DPM++            │
+    │    Generative Model (e.g., SDXL)    │
+    │          Scheduler: DPM++           │
     └──────────────┬──────────────────────┘
                    │ x_t (noisy sample)
                    ▼
     ┌─────────────────────────────────────┐
-    │       Error-360 Monitor             │
-    │      (Latent Proprioception)        │
+    │         Error-360 Monitor           │
+    │       (Latent Proprioception)       │
     │  ─────────────────────────────      │
     │  • Compute v_t = x_t - x_{t-1}      │
     │  • Compute ω_t (angular velocity)   │
@@ -91,7 +91,7 @@ Interventions are model-native and severity-adaptive:
                    │ metrics + trigger
                    ▼
     ┌─────────────────────────────────────┐
-    │       Controller (Reflex Layer)     │
+    │        Controller (Reflex Layer)    │
     │  ─────────────────────────────      │
     │  • Level 1: CFG rescale             │
     │  • Level 2: Step damping            │
@@ -104,9 +104,11 @@ Interventions are model-native and severity-adaptive:
 Our immediate focus is empirical validation to prove geometric instability predicts output degradation.
 
 ### Minimal Falsifiable Claim
+
 > "On SDXL with DPM++ solver, pulse spikes (α > θ) predict CLIP score drops (Δ > 0.2) within 3 steps with AUC ≥ 0.75 across 500 DrawBench prompts. Interventions reduce collapse rate by 30% with ≤5% FID increase."
 
 ### Validation Steps
+
 - [ ] **Dataset**: 500 prompts from DrawBench (known-hard cases)
 - [ ] **Collapse definition**: CLIP score drop >0.2 OR aesthetic score drop >0.15 within 5 steps
 - [ ] **Lead time measurement**: Distribution of (collapse_step - pulse_spike_step)
@@ -118,6 +120,7 @@ Our immediate focus is empirical validation to prove geometric instability predi
 - [ ] **Diversity check**: LPIPS and FID scores to ensure stability ≠ homogenization
 
 ### Visualizations
+
 - [ ] **Phase Portrait**: Real-time $\omega$ vs $\alpha$ plot with stability zones:
   - **Green**: Low ω, low α → Stable trajectory
   - **Yellow**: High ω, low α → Creative turn (smooth)
@@ -228,10 +231,10 @@ MIT License - see LICENSE for details.
 - A lightweight monitor (one dot product + two norms per step)
 - Model-agnostic framework adaptable to diffusion, autoregressive, and planning models
 
-**What Error-360 is not (yet):**
-- A formal proof of Lyapunov stability (inspiration only)
-- A universal fix for semantic hallucination (focuses on geometric instability)
-- A replacement for training-time improvements (complementary approach)
+**What Error-360 is not yet:**
+- A formal proof of Lyapunov stability
+- A universal fix for semantic hallucination
+- A replacement for training-time improvements
 
 ---
 
