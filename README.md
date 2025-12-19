@@ -11,7 +11,7 @@ Generative models, despite their success, suffer from critical reliability failu
 
 **Error-360 is a framework for anticipatory error handling that monitors the geometric stability of internal state trajectories during inference.**
 
-We introduce **Latent Proprioception**: the capacity for a model to sense instability in its own trajectory through the latent/activation space. By monitoring the kinematics of this path—specifically the angular acceleration ($\dot{\omega}$) or "jerk"—we detect geometric precursors to output degradation *before* quality collapse occurs.
+We introduce **Latent Proprioception**: the capacity for a model to sense instability in its own trajectory through the latent/activation space. By monitoring the kinematics of this path, specifically the angular acceleration ($\dot{\omega}$) or "jerk", we detect geometric precursors to output degradation *before* quality collapse occurs.
 
 ### The Value Proposition
 
@@ -239,3 +239,4 @@ MIT License - see LICENSE for details.
 ---
 
 *"The red line doesn't snap. It rotates."*
+
